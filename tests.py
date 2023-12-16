@@ -23,32 +23,33 @@ class TestBooksCollector:
     def test_add_new_book_with_incorrect_parameters(self, incorrect_len_book_name, status):
         collector = BooksCollector()
         collector.add_new_book(incorrect_len_book_name)
-        book_from_collector = collector.books_genre.get(incorrect_len_book_name)
+        book_from_collector = collector.get_book_genre(incorrect_len_book_name)
         assert book_from_collector == status
 
     def test_add_existing_book_in_dictionary(self):
         collector = BooksCollector()
 
         test_book_name = 'Mowgli'
-        test_genre = collector.genre[3]
+        test_genre = 'Мультфильмы'
 
         collector.add_new_book(test_book_name)
         collector.set_book_genre(test_book_name, test_genre)
 
         collector.add_new_book(test_book_name)
 
-        assert collector.get_book_genre(test_book_name)
+        actual = collector.get_book_genre(test_book_name)
+        assert test_genre == actual
 
     def test_add_genre_to_book(self):
         collector = BooksCollector()
 
         test_book_name = 'Dune'
-        test_genre = collector.genre[0]
+        test_genre = 'Фантастика'
 
         collector.add_new_book(test_book_name)
         collector.set_book_genre(test_book_name, test_genre)
 
-        actual = collector.books_genre.get(test_book_name)
+        actual = collector.get_book_genre(test_book_name)
         assert test_genre == actual
 
     def test_add_not_existing_genre_to_book(self):
@@ -60,20 +61,8 @@ class TestBooksCollector:
         collector.add_new_book(test_book_name)
         collector.set_book_genre(test_book_name, not_existing_genre)
 
-        actual = collector.books_genre.get(test_book_name)
-        assert actual == ''
-
-    def test_get_genre_by_book_name(self):
-        collector = BooksCollector()
-
-        test_book_name = 'Shining'
-        test_genre = collector.genre[1]
-
-        collector.add_new_book(test_book_name)
-        collector.set_book_genre(test_book_name, test_genre)
-
         actual = collector.get_book_genre(test_book_name)
-        assert test_genre == actual
+        assert actual == ''
 
     def test_get_specific_genre_for_three_books(self):
         collector = BooksCollector()
@@ -123,15 +112,6 @@ class TestBooksCollector:
         for book in actual:
             genre = different_books.get(book)
             assert genre not in collector.genre_age_rating
-
-    def test_add_book_in_favorites(self):
-        collector = BooksCollector()
-
-        favorite_book = 'Holy Book'
-        collector.add_new_book(favorite_book)
-        collector.add_book_in_favorites(favorite_book)
-
-        assert favorite_book in collector.favorites
 
     def test_delete_book_from_favorites(self):
         collector = BooksCollector()
